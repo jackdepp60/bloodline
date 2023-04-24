@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloodline</title>
+    
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/92f112c352.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="myContainer">
+        <div class="sidebar">
+            <div class="dashboard-title">
+                <!-- <div class="image-wrapper">
+                 <img src="img/dash-pic.jpg" alt="pic">
+                </div> -->
+                <div class="title-wrapper">
+                    <i class="fa-solid fa-house-user"></i><span>Dashboard</span>
+                </div>
+            </div>
+
+            <!-- SIDE MENU -->
+            <ul>
+                <li class="add-user"><i class="fa-solid fa-user-plus"></i><span>Add your name</span></li>
+                <li class="user-list"><i class="fa-solid fa-users"></i><span>My Profile</span></li>
+                <li class="settings"><i class="fa-solid fa-gear"></i><span>Settings</span></li>
+                <li><i class="fa-sharp fa-solid fa-circle-question"></i><span>Help</span></li>
+                <li class="version"><i class="fa-sharp fa-solid fa-circle-info"></i><span>Version</span></li>
+            </ul>
+
+        </div>
+        <div class="main">
+            <div class="top-nav">
+            </div>
+
+            <div class="main-data">
+                <!-- PROFILE DIV -->
+                <div class="profile hide-profile">
+                    <div class="image-wrapper">
+                        <img src="img/dash-pic.jpg" alt="pic">
+                    </div>
+                <h4></h4>
+                <ul class="profile-ul">
+                    <li class="profile-li view-bloodline">View Bloodline</li>
+                    <li class="profile-li edit-profile">Edit Profile</li>
+                    <h6>People in your bloodline</h6>
+                    <p class="total"></p>
+                </ul>
+                </div>
+
+                <!-- BLOODLINE DATA -->
+                
+                <div class="bloodline-data hidden-bloodline-data">
+                
+                </div>
+        
+
+                <!-- FORM -->
+                <form class="add-user-form" method="post" action="save_user.php">
+                    <div class="mb-3 labelDiv">
+        
+                      <input type="text" class="form-control username" aria-describedby="userHelp" placeholder="Full Name">
+                    </div>
+                    <div class="mb-3 labelDiv">
+                        <input type="text" class="form-control lastname" aria-describedby="userHelp" placeholder="Last Name">
+                    </div>
+                    <div class="mb-3 labelDiv locationLabel">
+                        <input type="text" class="form-control userlocationCity location" id="exampleInputPassword1" placeholder="City/Town">
+                    </div>
+                    <div id="emailHelp" class="form-text">This will connect you with your bloodline.</div>
+                    <button type="submit" class="submit-btn btn btn-primary">Submit</button>
+                  </form>
+
+                 
+                  <!-- TABLE DATA -->
+                  <table class="hide-ulData">
+                  </table>
+                  <!-- <ul class="ulData"></ul> -->
+
+                  </ul>
+
+                  
+            </div>
+
+        </div>
+    </div>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbuY_tDlZLjxWs2MvgUrEiW0r0Cm7XO7g&callback=initMap"></script>
+    <script src="script.js"></script>
+    
+</body>
+</html>
