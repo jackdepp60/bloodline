@@ -21,4 +21,4 @@ $stmt->bind_param("sss", $name, $lastname, $location);
 $stmt->execute();
 
 $conn->close();
-?>
+?>  
