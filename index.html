@@ -21,10 +21,10 @@
         <link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Manrope&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Anuphan&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Courgette&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
         <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
-
-
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
@@ -33,6 +33,9 @@
             <div class="cover-photo">
                 <img src="img/people3.svg" alt="">
             </div>
+            <!-- <div class="logo">
+                <img src="img/logo.png" alt="">
+            </div> -->
             
             <!-- <div class="sidebar">
                 <div class="dashboard-title">
@@ -58,13 +61,11 @@
                         <h4>Welcome! Add your name below!</h4>
                         <ul class="profile-ul">
                             <li class="profile-li edit-profile">Add Your Name</li>
-                            <li class="profile-li view-bloodline">View Bloodline</li>
+                            <li class="profile-li view-bloodline"><a href="#flag-counter">View Bloodline</a></li>
                         </ul>
-                    </div>
-
-                    <!-- BLOODLINE DATA -->
-                
+                    </div>                
             
+
 
                     <!-- FORM -->
                     <form class="add-user-form hide-form" method="post" action="save_user.php">
@@ -87,7 +88,7 @@
                         <div id="emailHelp" class="form-text">Let's get to your bloodline.</div>
                         <button type="submit" class="submit-btn btn btn-primary">Submit</button>
                     </form>
-
+                   
                     
                     <!-- TABLE DATA -->
                     <!-- <table class="hide-ulData">
@@ -96,12 +97,11 @@
 
                     </ul>
                 </div>
-            
-                
-                <!-- bloodline data -->
-                <div class="bloodline-data hidden-bloodline-data">
-                    
+
+                <div class="most-names hide-most-names">
+
                 </div>
+            
                 <div class="counter counter-hidden">
                     <div class="totalDiv">
                     <p class="total"></p>
@@ -109,6 +109,11 @@
                     <h6>People in your bloodline</h6>
                     
                 </div>
+                <!-- bloodline data -->
+                <div id="target-data" class="bloodline-data hidden-bloodline-data">
+                    
+                </div>
+               
             <!-- </div> -->
         
     
@@ -116,6 +121,17 @@
         <!-- </div> -->
         <div id="flag-counter">
             <ul id="country-list"></ul>
+        </div>
+
+        <div id="custom-alert" class="hidden-alert">
+            <div class="alert-container">
+              <p class="alert-message">A person has been added!</p>
+              <button onclick="hideAlert()" class="alert-close-button">Close</button>
+            </div>
+          </div>
+
+
+
         <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbuY_tDlZLjxWs2MvgUrEiW0r0Cm7XO7g&callback=initMap"></script>
         <script src="script.js"></script>
         

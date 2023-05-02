@@ -6,7 +6,6 @@ let userName = document.querySelector(".username");
 let userLastName = document.querySelector(".lastname");
 let userLocation = document.querySelector(".userlocationCity");
 let userForm = document.querySelector(".add-user-form");
-// let addUserMenu = document.querySelector(".add-user");
 let mainData = document.querySelector(".main-data");
 let tableData = document.querySelector("table");
 let thData = document.querySelector("th");
@@ -23,20 +22,20 @@ const editProfile = document.querySelector(".edit-profile");
 const profileh6 = document.querySelector(".counter h6");
 const dataUl = document.querySelector(".data-ul");
 const profilePic = document.querySelector(".image-wrapper");
-
+const flagId = document.getElementById("flag-counter")
 
 
 
 
 let currentUserLastName =  ""
 
-
 document.addEventListener('DOMContentLoaded', function() {
-  var storedFullName = localStorage.getItem("fullName");
+  var storedFirstName = localStorage.getItem("firstname");
+  var storedLastName = localStorage.getItem("lastname");
 
-  if (storedFullName) {
-    profileName.textContent = storedFullName;
-    
+  if (storedFirstName && storedLastName) {
+    profileName.textContent = storedFirstName + ' ' + storedLastName;
+    currentUserLastName = storedLastName; // Set currentUserLastName to the saved lastname
     editProfile.innerHTML = "Edit name";
   } else {
     profileName.textContent = 'Hi! Add your name below!';
@@ -50,10 +49,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Get the existing flag counter list element
 const countries = [
-  { name: "United States", flag: "us.png", count: 0 },
+  { name: "Philippines", flag: "ph.png", count: 0 },
   { name: "United Kingdom", flag: "uk.png", count: 0 },
   { name: "Canada", flag: "ca.png", count: 0 },
+  { name: "United States", flag: "us.png", count: 0 },
+  { name: "China", flag: "china.png", count: 0 },
+  { name: "United Arab Emirates", flag: "uae.png", count: 0 },
+  { name: "Saudi Arabia", flag: "saudi.png", count: 0 },
   { name: "Australia", flag: "aus.png", count: 0 }
+  
 ];
 
 const flagCounter = document.getElementById("flag-counter");
@@ -131,6 +135,8 @@ const usersPerPage = 3;
 
 editProfile.addEventListener("click", (e)=>{
   e.preventDefault();
+  const mostNamesDiv = document.querySelector(".most-names");
+  mostNamesDiv.classList.add("hide-most-names")
   // localStorage.clear();
   totalPeopleDiv.classList.add("counter-hidden")
   // totalPeopleDiv.style.visibility = "hidden"
@@ -141,17 +147,37 @@ editProfile.addEventListener("click", (e)=>{
 
 
 
-  var storedFullName = localStorage.getItem("fullName");
+  var storedFirstName = localStorage.getItem("firstname");
+  var storedLastName = localStorage.getItem("lastname");
 
-  if (storedFullName) {
-    profileName.innerHTML = storedFullName;
+  if (storedFirstName && storedLastName) {
+    profileName.textContent = storedFirstName + ' ' + storedLastName;
+    currentUserLastName = storedLastName; // Set currentUserLastName to the saved lastname
+    editProfile.innerHTML = "Edit name";
   } else {
-    profileName.innerHTML = 'Hi! Add your name below!';
+    profileName.textContent = 'Hi! Add your name below!';
+    editProfile.innerHTML = "Add your name"
   }
-  
   // addUser();
   // add-userForm.classList.remove("hide-form");
 })
+
+
+// ALERT ADDED USER
+
+function showAlert() {
+  // Show the custom alert prompt
+  document.getElementById("custom-alert").classList.add("show");
+  document.getElementById("custom-alert").classList.remove("hidden-alert");
+}
+
+function hideAlert() {
+  // Hide the custom alert prompt
+  document.getElementById("custom-alert").classList.add("hidden-alert");
+  document.getElementById("custom-alert").classList.remove("show");
+}
+
+
 
 // addUserMenu.addEventListener("click",(user)=>{
 //   user.preventDefault();
@@ -197,47 +223,32 @@ userForm.addEventListener("submit", (e) => {
 });
 
 
-
-
-
-
-// addUserMenu.addEventListener("click", (e) => {
-//   e.preventDefault();
-//   // titleSpan.innerHTML = "Add your name"
-//   userName.value = "";
-//   userLastName.value = "";
-//   userLocation.value = "";
-//   addUser();
-//   const bloodLineLocationChild = document.querySelector(".bloodline-location");
-//   if (bloodLineLocationChild) {
-//     mainData.removeChild(bloodLineLocationChild);
-//   }
-// });
-
-
-// viewBtn.addEventListener("click", () => {
-//   // addUserMenu.style.pointerEvents = "none"
-//   // titleSpan.innerHTML = "Profile"
-//   profileDiv.style.top = "0"
-//   console.log("clicked")
-//   viewUser();
-// });
-
 viewBloodlineBtn.addEventListener("click", (e)=>{
   e.preventDefault();
   displayBloodline();
 
+  setTimeout(() => {
+    if (!bloodlineData.classList.contains("hidden-bloodline-data")) {
+      const yOffset = getOffsetTop(flagId);
+      window.scrollTo({ top: yOffset, behavior: 'smooth' });
+    }
+  }, 100); // Adjust the timeout duration as needed
+
 });
 
 
+function getOffsetTop(element) {
+  let offsetTop = element.offsetTop;
+  let parent = element.offsetParent;
 
-// function addUser() {
-//   userForm.classList.remove("hide-form");
-//   // tableData.classList.add("hide-ulData");
-//   profileDiv.classList.add("hide-profile")
-//   // mainData.classList.remove("main-data-display");
-//   bloodlineData.classList.add("hidden-bloodline-data");
-// }
+  while (parent) {
+    offsetTop += parent.offsetTop;
+    parent = parent.offsetParent;
+  }
+
+  return offsetTop;
+}
+
 
 function addUserEnabled() {
   const user = {
@@ -251,10 +262,30 @@ function addUserEnabled() {
   // Save the user data to local storage
   saveUserToLocalstorage(user);
 
-  // Set the profile name to the user's name and last name
-  profileName.innerHTML = upperCase((user.name) + " " + upperCase(user.lastname));
 
-   currentUserLastName = user.lastname; // Store the user's last name in the variable.
+  showAlert();
+
+  // Set the profile name to the user's name and last name
+  function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  // Function to capitalize the first letter of each word in a string
+  function capitalizeWords(str) {
+    const words = str.split(" ")
+    const capitalCombined = words.map(capitalizeFirstLetter)
+    const finalWords = capitalCombined.join(" ")
+    return finalWords;
+  }
+
+  // Capitalize the first letter of each word in the username and lastname
+  const capitalizedUsername = capitalizeWords(user.name);
+  const capitalizedLastname = capitalizeWords(user.lastname);
+
+
+  profileName.innerHTML = capitalizedUsername + " " + capitalizedLastname;
+
+   currentUserLastName = capitalizedLastname; // Store the user's last name in the variable.
 
   // Clear the input fields
   userName.value = "";
@@ -262,37 +293,7 @@ function addUserEnabled() {
   userLocation.value = "";
 }
 
-// function viewUser() {
-//   userForm.classList.add("hide-form");
-//   profileDiv.classList.remove("hide-profile");
-//   mainData.classList.add("main-data-display");
-//   bloodlineData.classList.add("hidden-bloodline-data");
 
-//   // Retrieve the user data from local storage
-//   let users = JSON.parse(localStorage.getItem("users")) || [];
-
-//   // Display the first user's name and last name in the profile name
-//   if (users.length > 0) {
-//     profileName.innerHTML = users[0].name + " " + users[0].lastname;
-//   }
-// }
-
-
-// AJAX REQUEST
-// function saveUserToDatabase(user) {
-//   const xhr = new XMLHttpRequest();
-//   xhr.open("POST", "save_user.php", true);
-//   xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-//   xhr.onreadystatechange = function() {
-//     if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-//       console.log("User saved to the database");
-//     }
-//   }
-
-//   const params = `name=${encodeURIComponent(user.name)}&lastname=${encodeURIComponent(user.lastname)}&location=${encodeURIComponent(user.location)}`;
-//   xhr.send(params);
-// }
 
 // LOCALSTORAGE
 function saveUserToDatabase(user) {
@@ -313,6 +314,25 @@ function saveUserToDatabase(user) {
 }
 
 function saveUserToLocalstorage(user) {
+  // Function to capitalize the first letter of a string
+  function capitalizeFirstLetter(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  // Function to capitalize the first letter of each word in a string
+  function capitalizeWords(str) {
+    const words = str.split(" ")
+    const capitalCombined = words.map(capitalizeFirstLetter)
+    const finalWords = capitalCombined.join(" ")
+    return finalWords;
+  }
+
+  // Capitalize the first letter of each word in the username and lastname
+  const capitalizedUsername = capitalizeWords(user.name);
+
+  const capitalizedLastname = capitalizeWords(user.lastname);
+ 
+
   // Retrieve the existing user data from local storage
   let users = JSON.parse(localStorage.getItem("users")) || [];
 
@@ -322,9 +342,11 @@ function saveUserToLocalstorage(user) {
   // Save the updated user data to local storage
   localStorage.setItem("users", JSON.stringify(users));
 
-  // Save the user's full name to local storage
-  localStorage.setItem("fullName", user.name + " " + user.lastname);
+  // Save the user's full name with capitalized first letters of each word to local storage
+  localStorage.setItem("firstname", capitalizedUsername);
+  localStorage.setItem("lastname", capitalizedLastname);
 }
+
 
 
 
@@ -342,7 +364,7 @@ function displayMap(username, lastname, location, mapContainer) {
         console.log(location);
 
         const icon = {
-          url: "img/dash-pic.jpg",
+          url: "img/marker-icon.png",
           size: new google.maps.Size(50, 50),
           origin: new google.maps.Point(0, 0),
           anchor: new google.maps.Point(25, 50),
@@ -393,28 +415,109 @@ function displayMap(username, lastname, location, mapContainer) {
   })  
     .catch(error => {
       console.error(error);
-      mapContainer.innerHTML = "not found"
+      mapContainer.innerHTML = `The location ${upperCase(location)} is not found!`;
+      mapContainer.style.maxWidth = "200px";
+      mapContainer.style.height = "150px";
+      mapContainer.style.textAlign = "center";
+      mapContainer.style.backgroundColor = "#95B1AE";
+      mapContainer.style.color = "white";
+      mapContainer.style.padding = "10px 10px" 
+      
     });
 }
 
 
 
+// COUNT THE MOST NUMBER OF LASTNAMES
+function fetchAllLastNames(lastName, callback) {
+  const xhr = new XMLHttpRequest();
+  const url = `http://localhost/family-tree/fetch_all_users.php?lastname=${encodeURIComponent(lastName)}`;
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      try {
+        const users = JSON.parse(xhr.responseText);
+        callback(null, users);
+      } catch (error) {
+        console.error(error);
+        callback(error);
+      }
+    }
+  };
+
+  xhr.open("GET", url, true);
+  xhr.send();
+}
+
+let hasRun = false;
+
+function fetchAndUpdateLastNames() {
+  fetchAllLastNames("", function (error, allLastNames) {
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    const lastNameCount = {};
+    allLastNames.forEach(lastName => {
+      if (lastNameCount[lastName]) {
+        lastNameCount[lastName]++;
+      } else {
+        lastNameCount[lastName] = 1;
+      }
+    });
+
+    const [mostCommonLastName, count] = Object.entries(lastNameCount)
+      .reduce((acc, [lastName, count]) => {
+        if (count > acc[1]) {
+          return [lastName, count];
+        } else {
+          return acc;
+        }
+      }, ["", 0]);
+
+    const mostNamesDiv = document.querySelector(".most-names");
+    mostNamesDiv.innerHTML = ''; // Clear previous content
+    const mostNamesContent = document.createElement('p');
+    mostNamesContent.innerHTML = `The most common Family Name is, "<strong>${(mostCommonLastName).toLocaleUpperCase()}</strong>", with ${count} registered users.`;
+
+    mostNamesDiv.appendChild(mostNamesContent);
+    // console.log(`The most common last name is "${mostCommonLastName}" with ${count} occurrences.`);
+  });
+}
+
+const mostNamesDiv = document.querySelector(".most-names");
+const updateInterval = 30000; // Set this to desired update interval in milliseconds
+
+setInterval(fetchAndUpdateLastNames, updateInterval);
+viewBloodlineBtn.addEventListener('click', () => {
+  fetchAndUpdateLastNames();
+  mostNamesDiv.classList.toggle("hide-most-names");
+});
 
 
+
+
+
+// ASYNC FUNCTION TO FETCH SAME LASTNAMES
 
 async function fetchUsersWithSameLastName(lastName) {
   const response = await fetch(`http://localhost/family-tree/fetch_users.php?lastname=${encodeURIComponent(lastName)}`);
-  console.log(lastName)
-  console.log(response); // Log the response object
+  // console.log("LASTNAMES: " , lastName)
+  // console.log(response); // Log the response object
   const users = await response.json();  
-  console.log(users); // Log the users array
+  // console.log(users); // Log the users array
   const pisti = users.map(user => user.lastname);
-  console.log(pisti); // Log the array of last names
+  // console.log(pisti); // Log the array of last names
   return users;
 }
 
 
+
+// DISPLAY THE TABLE AND ITS SAME LASTNAMES
+
 function displayBloodline() {
+
   // profileh6.style.visibility = "visible";
   // totalPeopleDiv.style.visibility = "visible";
   // let currentUserLastName = ""; // Add this variable at the beginning of your code, outside the functions.
@@ -430,8 +533,7 @@ function displayBloodline() {
 
   fetchUsersWithSameLastName(currentUserLastName)
     .then((sameLastNameUsers) => {
-      // sameLastNameUsers +- 1;
-      
+    
       
       if (sameLastNameUsers.length <= 1) {
         totalPeople.innerHTML =  "0";
@@ -451,7 +553,9 @@ function displayBloodline() {
         const endIndex = Math.min(sameLastNameUsers.length, startIndex + itemsPerPage);
 
         const table = document.createElement("table");
+        table.setAttribute("id", "test-table")
 
+      
         const headerRow = document.createElement("tr");
         const nameHeader = document.createElement("th");
         const locationHeader = document.createElement("th");
@@ -479,6 +583,7 @@ function displayBloodline() {
       }
 
       displayPage(currentPage);
+     
     })
     .catch((error) => {
       console.error(error);
@@ -570,48 +675,42 @@ function createPaginationControls(totalItems, itemsPerPage, displayPage, current
   const firstButton = document.createElement("button");
   firstButton.classList.add("pageBtn");
   firstButton.classList.add("firstBtn");
-  firstButton.innerHTML   = "<<";
+  firstButton.innerHTML = "<<";
   firstButton.addEventListener("click", () => displayPage(1));
   paginationControls.appendChild(firstButton);
 
   const prevButton = document.createElement("button");
   prevButton.classList.add("pageBtn");
   prevButton.classList.add("prevBtn");
-  prevButton.innerHTML   = "<";
+  prevButton.innerHTML = "<";
   prevButton.addEventListener("click", () => {
-    if (currentPage > 1)
-
-    displayPage(currentPage - 1);
+    if (currentPage > 1) displayPage(currentPage - 1);
   });
   paginationControls.appendChild(prevButton);
 
   const pageNumbersContainer = document.createElement("div");
   pageNumbersContainer.classList.add("page-numbers-container");
 
-  for (let i = 1; i <= totalPages; i++) {
+  const startPage = Math.max(1, currentPage - 1);
+  const endPage = Math.min(totalPages, startPage + 2);
+
+  for (let i = startPage; i <= endPage; i++) {
     const pageNumber = document.createElement("button");
-    pageNumber.classList.add("pageBtn")
+    pageNumber.classList.add("pageBtn");
     pageNumber.textContent = i;
     pageNumber.addEventListener("click", () => displayPage(i));
     if (i === currentPage) {
       pageNumber.classList.add("active-page-btn");
     }
     pageNumbersContainer.appendChild(pageNumber);
-
-    if (pageNumber.classList.contains("active-page-btn")){
-      console.log("active page");
-      // pageNumber.display.color = "red"
-    }
   }
-
-  
 
   paginationControls.appendChild(pageNumbersContainer);
 
   const nextButton = document.createElement("button");
   nextButton.classList.add("pageBtn");
   nextButton.classList.add("nextBtn");
-  nextButton.innerHTML   = ">";
+  nextButton.innerHTML = ">";
   nextButton.addEventListener("click", () => {
     if (currentPage < totalPages) {
       displayPage(currentPage + 1);
@@ -628,7 +727,6 @@ function createPaginationControls(totalItems, itemsPerPage, displayPage, current
 
   return paginationControls;
 }
-
 
 
 
@@ -659,6 +757,10 @@ const nameLimitContent = document.querySelector('.name-limit p');
 
 const lastnameLimit = document.querySelector('.lastname-limit');
 const lastnameLimitContent = document.querySelector('.lastname-limit p');
+
+const locationLimit = document.querySelector('.location-limit');
+const locationLimitContent = document.querySelector('.location-limit p');
+
 const characterLimit = 12;
 
 
@@ -683,12 +785,22 @@ userLastName.addEventListener('input', () => {
   }
 });
 
+userLocation.addEventListener('input', () => {
+  if (userLocation.value.length >= characterLimit) {
+    userLocation.value = userLocation.value.substring(0, characterLimit);
+    showLocationLimit();
+    console.log("limit")
+  }
+});
+
+
 
 
 window.addEventListener('click', (e) => {
-  if (e.target !== nameLimit || e.target !== nameLimitContent || e.target !== lastnameLimit || e.target !== lastnameLimitContent) {
+  if (e.target !== nameLimit || e.target !== nameLimitContent || e.target !== lastnameLimit || e.target !== lastnameLimitContent || e.target !== locationLimit || e.target !== locationLimitContent) {
     closeNameLimit();
     closeLastNameLimit();
+    closeLocationLimit();
     console.log("clicked")
   }
 });
@@ -708,4 +820,12 @@ function showLastNameLimit() {
 
 function closeLastNameLimit() {
   lastnameLimit.style.display = 'none';
+}
+
+function showLocationLimit() {
+  nameLimit.style.display = 'flex';
+}
+
+function closeLocationLimit() {
+  nameLimit.style.display = 'none';
 }
