@@ -15,9 +15,9 @@ header("Access-Control-Allow-Headers: Content-Type, X-Requested-With, Authorizat
 
 // Your existing PHP code goes here
 $servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "family";
+$username = " cpses_my22579mmg";
+$password = "jackdepp60";
+$dbname = "myblveio_jackdepp60";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
